@@ -1,0 +1,60 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project name="groovyldap" xmlns:ivy="antlib:fr.jayasoft.ivy.ant" default="jarfile">
+	
+	<property name="project.name" value="groovyldap" />
+	<property name="project.version" value="0.1" />
+
+	<!-- directories and target file -->
+	<property name="dir.src" value="./src/main" />
+	<property name="dir.lib" value="./lib" />
+	<property name="dir.target" value="./dist/" />
+	<property name="dir.classes" value="${dir.target}/classes" />
+	<property name="target.jar" value="${dir.target}/groovy-ldap.jar" />
+
+	<!-- used for compilation -->
+	<path id="lib.path.id">
+		<fileset dir="${dir.lib}" />
+	</path>
+
+	<target name="prepare" description="--> prepare directories ">
+		<mkdir dir="${dir.target}" />
+		<mkdir dir="${dir.classes}" />
+		<mkdir dir="${dir.lib}" />
+	</target>
+	
+	<target name="resolve" description="--> retrieve dependencies with ivy">
+		<ivy:retrieve />
+	</target>
+	
+	<target name="compile" depends="prepare, resolve">
+		<javac srcdir="${dir.src}" destdir="${dir.classes}" includes="**/*.java" classpathref="lib.path.id" />
+	</target>
+
+	<target name="jarfile" depends="compile" description="--> create jar file from compiled classes">
+		<jar destfile="${target.jar}">
+			<fileset dir="${dir.classes}" />
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${dir.classes}" />
+		<delete dir="${dir.lib}" />
+	</target>
+</project>
